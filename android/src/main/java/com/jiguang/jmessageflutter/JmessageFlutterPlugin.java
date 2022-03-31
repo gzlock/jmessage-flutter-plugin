@@ -1576,7 +1576,7 @@ public class JmessageFlutterPlugin implements FlutterPlugin, MethodCallHandler {
             return;
         }
 
-        ContactManager.sendInvitationRequest(username, appKey, reason, new BasicCallback() {
+        ContactManager.declineInvitation(username, appKey, reason, new BasicCallback() {
 
             @Override
             public void gotResult(int status, String desc) {
