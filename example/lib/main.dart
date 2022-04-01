@@ -7,11 +7,10 @@ import 'package:jmessage_flutter_example/conversation_manage_view.dart';
 import 'package:jmessage_flutter_example/group_manage_view.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:platform/platform.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 
-const String kMockAppkey = "e58a32cb3e4469ebf31867e5"; //'你自己应用的 AppKey';
-const String kMockUserName = '0001';
-const String kMockPassword = '1111';
+const String kMockAppkey = "4a97b9f19750f46d70a7471e"; //'你自己应用的 AppKey';
+const String kMockUserName = 'user_d4831130-c3bd-4d2c-8f87-38c6f9d43514';
+const String kMockPassword = '7XKUZ5';
 const String kCommonPassword = '123456a';
 
 const String kMockGroupName = 'TESTGroupName';
@@ -27,7 +26,7 @@ const String kMockGroupId = '29033635';
 final JMGroup kMockGroup =
     JMGroup.fromJson({'type': JMGroupType.private, 'groupId': kMockGroupId});
 
-const String kMockChatRoomid = '10003152';
+const String kMockChatRoomid = '29098401';
 final JMChatRoom kMockChatRoom =
     JMChatRoom.fromJson({'roomId': kMockChatRoomid});
 
@@ -59,9 +58,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    print(flutterLog + "demo manin init state");
-    // initPlatformState();
-
     jmessage..setDebugMode(enable: true);
     jmessage.init(isOpenMessageRoaming: true, appkey: kMockAppkey);
     jmessage.applyPushAuthority(
@@ -99,21 +95,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void demoLoginUserAction() async {
-    print(flutterLog + "loginUserAction : " + usernameTextEC1.text);
 
     setState(() {
       _loading = true;
     });
-
-    if (usernameTextEC1.text.isEmpty) {
-      setState(() {
-        _loading = false;
-        _result = "【登录】username 不能为空";
-      });
-      return;
-    }
-    String name = usernameTextEC1.text;
-    await jmessage.login(username: name, password: kCommonPassword).then(
+    await jmessage.login(username: kMockUserName, password: kMockPassword).then(
         (onValue) {
       setState(() {
         _loading = false;
@@ -257,44 +243,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void demoSendVideoMessage() async {
     print(flutterLog + "demoSendVideoMessage " + usernameTextEC2.text);
-
-    setState(() {
-      _loading = true;
-    });
-
-    if (usernameTextEC2.text == "") {
-      setState(() {
-        _loading = false;
-        _result = "【发消息】对方 username 不能为空";
-      });
-      return;
-    }
-    String username = usernameTextEC2.text;
-
-    PickedFile? selectVideoPath = await ImagePicker().getVideo(
-        source: ImageSource.gallery, maxDuration: const Duration(seconds: 10));
-
-    String? thumbnailPath = await VideoThumbnail.thumbnailFile(
-      video: selectVideoPath!.path,
-      imageFormat: ImageFormat.PNG,
-      maxWidth: 128,
-      // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
-      quality: 25,
-    );
-
-    // print('selectVideoPath ======${selectVideoPath.path},thumbnailPath = $thumbnailPath');
-    JMSingle type = JMSingle.fromJson({"username": username});
-    JMVideoMessage msg = await jmessage.sendVideoMessage(
-        type: type,
-        duration: null,
-        thumbFormat: "",
-        videoFileName: "",
-        thumbImagePath: thumbnailPath,
-        videoPath: selectVideoPath.path);
-    setState(() {
-      _loading = false;
-      _result = "【视频消息】${msg.toJson()}";
-    });
   }
 
   //监听聊天室消息的监听id
@@ -1122,7 +1070,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(" "),
-                CustomButton(title: "注册", onPressed: demoRegisterAction),
+                CustomButton(title: "测试API", onPressed: testAPIs),
                 Text(" "),
                 CustomButton(title: "登录", onPressed: demoLoginUserAction),
               ],

@@ -171,7 +171,9 @@ class JmessageFlutter {
   }
 
   addContactNotifyListener(JMContactNotifyListener callback) {
-    _eventHanders.contactNotify.add(callback);
+    if (!_eventHanders.contactNotify.contains(callback)) {
+      _eventHanders.contactNotify.add(callback);
+    }
   }
 
   removeContactNotifyListener(JMContactNotifyListener callback) {
@@ -611,7 +613,9 @@ class JmessageFlutter {
       };
     }
 
-    param..addAll(optionMap)..addAll({'id': message?.id});
+    param
+      ..addAll(optionMap)
+      ..addAll({'id': message?.id});
     Map resMap = await _channel.invokeMethod(
         'sendDraftMessage', param..removeWhere((key, value) => value == null));
     var res = JMNormalMessage.generateMessageFromJson(resMap);
@@ -639,7 +643,9 @@ class JmessageFlutter {
       param..addAll({'extras': extras});
     }
 
-    param..addAll(optionMap)..addAll({'text': text});
+    param
+      ..addAll(optionMap)
+      ..addAll({'text': text});
 
     Map resMap = await _channel.invokeMethod(
         'sendTextMessage', param..removeWhere((key, value) => value == null));
@@ -669,7 +675,9 @@ class JmessageFlutter {
       param..addAll({'extras': extras});
     }
 
-    param..addAll(optionMap)..addAll({'path': path});
+    param
+      ..addAll(optionMap)
+      ..addAll({'path': path});
 
     Map resMap = await _channel.invokeMethod(
         'sendImageMessage', param..removeWhere((key, value) => value == null));
@@ -699,7 +707,9 @@ class JmessageFlutter {
       param..addAll({'extras': extras});
     }
 
-    param..addAll(optionMap)..addAll({'path': path});
+    param
+      ..addAll(optionMap)
+      ..addAll({'path': path});
 
     Map resMap = await _channel.invokeMethod(
         'sendVoiceMessage', param..removeWhere((key, value) => value == null));
@@ -729,7 +739,9 @@ class JmessageFlutter {
       param..addAll({'extras': extras});
     }
 
-    param..addAll(optionMap)..addAll({'customObject': customObject});
+    param
+      ..addAll(optionMap)
+      ..addAll({'customObject': customObject});
 
     Map resMap = await _channel.invokeMethod(
         'sendCustomMessage', param..removeWhere((key, value) => value == null));
@@ -798,7 +810,9 @@ class JmessageFlutter {
       param..addAll({'extras': extras});
     }
 
-    param..addAll(optionMap)..addAll({'path': path});
+    param
+      ..addAll(optionMap)
+      ..addAll({'path': path});
 
     Map resMap = await _channel.invokeMethod(
         'sendFileMessage', param..removeWhere((key, value) => value == null));

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jmessage_flutter/jmessage_flutter.dart';
+import 'package:jmessage_flutter_example/conversation_page.dart';
 import 'package:jmessage_flutter_example/main.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
@@ -54,12 +55,11 @@ class _ConversationManageViewState extends State<ConversationManageView> {
   Widget _buildContentView() {
     return new Column(
       children: <Widget>[
-        new Container(
-          margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
-          color: Colors.brown,
-          child: Text(_result),
-          width: double.infinity,
+        SizedBox(
           height: 120,
+          child: SingleChildScrollView(
+            child: Text(_result),
+          ),
         ),
         new Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -117,6 +117,10 @@ class _ConversationManageViewState extends State<ConversationManageView> {
             _result = "【选择的会话】\n ${object.toJson()}";
           });
           selectConversationInfo = object;
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => PageConversation(conversation: object)));
         },
       ),
     );
@@ -159,8 +163,8 @@ class _ConversationManageViewState extends State<ConversationManageView> {
       _loading = true;
     });
 
-    JMTextMessage msg = await selectConversationInfo!.sendTextMessage(
-        text: "send msg queen index $textIndex");
+    JMTextMessage msg = await selectConversationInfo!
+        .sendTextMessage(text: "send msg queen index $textIndex");
     setState(() {
       _loading = false;
       _result = "【文本消息】${msg.toJson()}";
@@ -184,16 +188,18 @@ class _ConversationManageViewState extends State<ConversationManageView> {
     });
 
     selectConversationInfo!
-        .getHistoryMessages(from: 0, limit: 20)
-        .then((msgList) {
-      for (JMNormalMessage msg in msgList) {
-        print("get conversation history msg :   ${msg.toJson()}");
-      }
-
-      setState(() {
-        _loading = false;
-        _result = "【消息列表】${msgList.toString()}";
-      });
-    });
+        .getHistoryMessages(from: 0, limit: 20, isDescend: true)
+        .then(
+      (msgList) {
+        for (JMNormalMessage msg in msgList) {
+          print("get conversation history msg :   ${msg.toJson()}");
+        }
+        setState(() {
+          _loading = false;
+          _result =
+              "【消息列表】${msgList.map((m) => '${m.from.nickname}: ${m.text}').join('\n')}";
+        });
+      },
+    );
   }
 }
